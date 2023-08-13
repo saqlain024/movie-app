@@ -2,6 +2,7 @@ import React from "react";
 import { data } from "../data";
 import Navbar from "./Navbar";
 import MovieCard from "./MovieCard";
+import { addMovies } from "../actions";
 
 //whenever dispatch is happend then suscribe is called and executed 
 
@@ -10,15 +11,12 @@ class App extends React.Component {
     const { store } = this.props;
     store.subscribe(() => {
       console.log("UPDATED");
-      this.forceUpdate();
+      this.forceUpdate();   // rerender whole app component forcefully
     });
 
     //make api call
     // dispatch action
-    store.dispatch({
-      type: "ADD_MOVIES",
-      movies: data,
-    });
+    store.dispatch(addMovies(data));
 
     console.log("STATE", this.props.store.getState());
   }
