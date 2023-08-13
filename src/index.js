@@ -1,22 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createStore } from 'redux';
-import { configureStore } from '@reduxjs/toolkit'
 
 import './index.css';
 import App from './components/App';
-import movies from './reducers';
+import rootReducer from './reducers';
 
 
-const store = createStore(movies);
+const store = createStore(rootReducer);
 console.log('store', store);
-// console.log('STATE', store.getState());
-// const store = configureStore({
-//   reducer: {
-//     movies: movies,
-//   }
-// })
-// console.log('store', store);
+
+
 // console.log(' BEFORE STATE', store.getState());
 
 // store.dispatch({
@@ -25,7 +19,6 @@ console.log('store', store);
 // });
 
 // console.log(' AFTER STATE', store.getState());
-
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
