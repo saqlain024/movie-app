@@ -2,7 +2,7 @@ import React from "react";
 import { data } from "../data";
 import Navbar from "./Navbar";
 import MovieCard from "./MovieCard";
-import { addMovies } from "../actions";
+import { addMovies, setShowFavourite } from "../actions";
 
 //whenever dispatch is happend then suscribe is called and executed
 
@@ -34,27 +34,47 @@ class App extends React.Component {
     return false;
   };
 
+  onChangeTab = (val) => {
+    this.props.store.dispatch(setShowFavourite(val));
+  };
+
   render() {
-    const { list } = this.props.store.getState(); // { list: [], favorite: [] }
+    const { list, favourites, showFavourite } = this.props.store.getState(); // { list: [], favorite: [] }
     console.log("render", this.props.store.getState());
+
+    const displayMovies = showFavourite ? favourites : list;
+
     return (
       <div className="App">
         <Navbar />
         <div className="main">
           <div className="tabs">
-            <div className="tab">Movies</div>
-            <div className="tab">Favourites</div>
+            <div
+              className={`tab ${showFavourite ? "" : "active-tabs"}`}
+              onClick={() => this.onChangeTab(false)}
+            >
+              Movies
+            </div>
+            <div
+              className={`tab ${showFavourite ? "active-tabs" : ""}`}
+              onClick={() => this.onChangeTab(true)}
+            >
+              Favourites
+            </div>
           </div>
           <div className="list">
-            {list.map((movie, index) => (
+            {displayMovies.map((movie, index) => (
               <MovieCard
                 movie={movie}
                 key={`movies-${index}`}
                 dispatch={this.props.store.dispatch}
-                isFavourite= {this.isMovieFavourite(movie)}
+                isFavourite={this.isMovieFavourite(movie)}
               />
             ))}
           </div>
+          {displayMovies.length == 0 ? (
+            <div className="no-movies"> no movies to display!</div>
+          ) : null}
         </div>
       </div>
     );
