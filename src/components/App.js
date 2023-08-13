@@ -4,14 +4,14 @@ import Navbar from "./Navbar";
 import MovieCard from "./MovieCard";
 import { addMovies } from "../actions";
 
-//whenever dispatch is happend then suscribe is called and executed 
+//whenever dispatch is happend then suscribe is called and executed
 
 class App extends React.Component {
   componentDidMount() {
     const { store } = this.props;
     store.subscribe(() => {
       console.log("UPDATED");
-      this.forceUpdate();   // rerender whole app component forcefully
+      this.forceUpdate(); // rerender whole app component forcefully
     });
 
     //make api call
@@ -21,8 +21,21 @@ class App extends React.Component {
     console.log("STATE", this.props.store.getState());
   }
 
+  isMovieFavourite = (movie) => {
+    const { favourites } = this.props.store.getState();
+
+    const index = favourites.indexOf(movie);
+
+    if (index !== -1) {
+      //found the movie
+      return true;
+    }
+
+    return false;
+  };
+
   render() {
-    const {list} = this.props.store.getState();  // { list: [], favorite: [] }
+    const { list } = this.props.store.getState(); // { list: [], favorite: [] }
     console.log("render", this.props.store.getState());
     return (
       <div className="App">
@@ -34,7 +47,12 @@ class App extends React.Component {
           </div>
           <div className="list">
             {list.map((movie, index) => (
-              <MovieCard movie={movie} key={`movies-${index}`} />
+              <MovieCard
+                movie={movie}
+                key={`movies-${index}`}
+                dispatch={this.props.store.dispatch}
+                isFavourite= {this.isMovieFavourite(movie)}
+              />
             ))}
           </div>
         </div>
