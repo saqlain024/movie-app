@@ -53,9 +53,11 @@ console.log("StoreContext", StoreContext);
 class Provider extends React.Component {
   render() {
     const { store } = this.props;
-    <StoreContext.Provider value={store}>
-      {this.props.children}
-    </StoreContext.Provider>;
+    return (
+      <StoreContext.Provider value={store}>
+        {this.props.children}
+      </StoreContext.Provider>
+    );
   }
 }
 
