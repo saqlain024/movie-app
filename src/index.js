@@ -1,10 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { createStore, applyMiddleware } from 'redux';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import thunk from "redux-thunk";
+import { createStore, applyMiddleware } from "redux";
 
-import './index.css';
-import App from './components/App';
-import rootReducer from './reducers';
+import "./index.css";
+import App from "./components/App";
+import rootReducer from "./reducers";
+import { type } from "@testing-library/user-event/dist/type";
 
 //curried fxn
 //function logger(obj, next, action)
@@ -20,16 +22,29 @@ import rootReducer from './reducers';
 // }
 
 //we can write above commented middleware in below too
-const logger = ({dispatch, getState}) => (next) => (action) => {
-  //logger code
-  console.log('ACTION_TYPE = ' , action.type);
-  next(action);
-}
+const logger =
+  ({ dispatch, getState }) =>
+  (next) =>
+  (action) => {
+    //logger code
+    if (typeof action !== "function") {
+      console.log("ACTION_TYPE = ", action.type);
+    }
 
+    next(action);
+  };
 
-const store = createStore(rootReducer, applyMiddleware(logger));
-console.log('store', store);
+// const thunk = ({dispatch, getState}) => (next) => (action) => {
+//   //logger code
+//   if(typeof action === 'function') {
+//     action(dispatch);
+//     return;
+//   }
+//   next(action);
+// }
 
+const store = createStore(rootReducer, applyMiddleware(logger, thunk));
+console.log("store", store);
 
 // console.log(' BEFORE STATE', store.getState());
 
@@ -40,11 +55,9 @@ console.log('store', store);
 
 // console.log(' AFTER STATE', store.getState());
 
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <App store={store} />
   </React.StrictMode>
 );
-
