@@ -51,16 +51,15 @@ export function addMoviesToList(movie) {
   };
 }
 
-export function handleMovieSearch(movie) {    // this fxn returns a fxn  so we use thunks middleware
-  const url = `https://www.omdbapi.com/?i=tt3896198&apikey=1a2f3dd3&t=${movie}`;
-
-  return function (dispatch) {      
+export function handleMovieSearch(searchText) {    // this fxn returns a fxn  so we use thunks middleware
+ 
+  return function (dispatch) { 
+    const url = `https://www.omdbapi.com/?i=tt3896198&apikey=1a2f3dd3&t=${searchText}`;     
     fetch(url)
       .then((response) => response.json())
       .then((movie) => {
         console.log("movie", movie);
-
-        // dispatch an action
+        // dispatch an action to save the results in store
         dispatch(addMovieSearchResult(movie));
       });
   };
